@@ -1,0 +1,106 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="./elasticjs.html">
+<link rel="import" href="./lodash.html">
+
+<!--
+Element which fetches and provides a select input for an ElasticSearch index
+
+Example:
+    <elastic-client
+        config='{"host": "http://localhost:9200"}'
+        client={{esClient}}
+        cluster-status={{esStatus}}
+    >
+    </elastic-client>
+
+    <elastic-type-selector
+        client=[[esClient]]
+        index="ads"
+        selected-type={{selectedType}}
+        available-types={{availableTypes}}
+    ></elastic-type-selector>
+
+@demo demo/index.html
+-->
+<dom-module id="elastic-type-selector">
+    <template>
+        <style>
+            :host {
+                display: block;
+                box-sizing: border-box;
+            }
+
+            .author img {
+                display: block;
+                float: left;
+                margin-right: 5px;
+                max-height: 100px;
+                max-width: 100px;
+            }
+        </style>
+
+        <paper-dropdown-menu label="Type" value="{{selectedType}}">
+            <paper-menu class="dropdown-content">
+                <template is="dom-repeat" items="{{availableTypes}}" as="availableType">
+                    <paper-item>{{availableType}}</paper-item>
+                </template>
+            </paper-menu>
+        </paper-dropdown-menu>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+            Polymer({
+                is: 'elastic-type-selector',
+
+                properties: {
+                    selectedType: {
+                        type: String,
+                        notify: true
+                    },
+
+                    availableTypes: {
+                        type: Array,
+                        notify: true,
+                        readOnly: true
+                    },
+
+                    index: {
+                        type: String
+                    },
+
+                    client: {
+                        type: Object
+                    }
+                },
+
+                observers: [
+                    'fetchAvailableTypes(client, index)'
+                ],
+
+                fetchAvailableTypes: function(client, index) {
+                    var me = this;
+
+                    client.indices.getMapping({
+                        index: index
+                    })
+                    .then(function(mapping) {
+                        console.log(mapping);
+                        var types = [];
+                        _.each(mapping[index].mappings, function(typeMapping, type) {
+                            if(type !== '_default_') {
+                                types.push(type);
+                            }
+                        })
+                        me._setAvailableTypes(types);
+                        return;
+                    })
+                }
+            });
+        })();
+    </script>
+</dom-module>
