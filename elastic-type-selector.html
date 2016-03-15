@@ -89,7 +89,6 @@ Example:
                         index: index
                     })
                     .then(function(mapping) {
-                        console.log(mapping);
                         var types = [];
                         _.each(mapping[index].mappings, function(typeMapping, type) {
                             if(type !== '_default_') {
