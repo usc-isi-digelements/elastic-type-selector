@@ -27,21 +27,6 @@ Example:
 -->
 <dom-module id="elastic-type-selector">
     <template>
-        <style>
-            :host {
-                display: block;
-                box-sizing: border-box;
-            }
-
-            .author img {
-                display: block;
-                float: left;
-                margin-right: 5px;
-                max-height: 100px;
-                max-width: 100px;
-            }
-        </style>
-
         <paper-dropdown-menu label="Type" value="{{selectedType}}">
             <paper-menu class="dropdown-content">
                 <template is="dom-repeat" items="{{availableTypes}}" as="availableType">
@@ -58,21 +43,33 @@ Example:
                 is: 'elastic-type-selector',
 
                 properties: {
+                    /**
+                     * The currently selected type
+                    */
                     selectedType: {
                         type: String,
                         notify: true
                     },
 
+                    /**
+                     * The available types as returned from elasticsearch
+                    */
                     availableTypes: {
                         type: Array,
                         notify: true,
                         readOnly: true
                     },
 
+                    /**
+                     * The elasticsearch index for which types should be fetched
+                    */
                     index: {
                         type: String
                     },
 
+                    /**
+                     * The elasticsearch client to use to fetch the types
+                    */
                     client: {
                         type: Object
                     }
@@ -82,6 +79,10 @@ Example:
                     'fetchAvailableTypes(client, index)'
                 ],
 
+                /**
+                 * Query elasticsearch for the available types using
+                 * the supplied elasticsearch client
+                */
                 fetchAvailableTypes: function(client, index) {
                     var me = this;
 

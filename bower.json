@@ -4,7 +4,7 @@
   "authors": [
     "Next Century Corporation"
   ],
-  "description": "An element providing a solution to no problem in particular.",
+  "description": "An element that queries elasticsearch for available types and renders a dropdown to allow for selection of a type",
   "keywords": [
     "web-component",
     "polymer",
