@@ -24,8 +24,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- You can use the document as a place to set up your fixtures. -->
     <test-fixture id="elastic-type-selector-fixture">
       <template>
+        <h2>elastic-type-selector</h2>
         <elastic-type-selector>
-          <h2>elastic-type-selector</h2>
+          
         </elastic-type-selector>
       </template>
     </test-fixture>
@@ -39,30 +40,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           myEl = fixture('elastic-type-selector-fixture');
         });
 
-        test('defines the "author" property', function() {
-          assert.equal(myEl.author.name, 'Dimitri Glazkov');
-          assert.equal(myEl.author.image, 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg');
+        test('choosing ALL sets elasticTypes to empty array', function() {
+
         });
 
-        test('says hello', function() {
-          assert.equal(myEl.sayHello(), 'elastic-type-selector says, Hello World!');
+        test('initial type is ALL', function() {
 
-          var greetings = myEl.sayHello('greetings Earthlings');
-          assert.equal(greetings, 'elastic-type-selector says, greetings Earthlings');
         });
 
-        test('fires lasers', function(done) {
-          myEl.addEventListener('elastic-type-selector-lasers', function(event) {
-            assert.equal(event.detail.sound, 'Pew pew!');
-            done();
-          });
-          myEl.fireLasers();
-        });
+        test('selecting a type updates elasticTypes array', function() {
 
-        test('distributed children', function() {
-          var els = myEl.getContentChildren();
-          assert.equal(els.length, 1, 'one distributed node');
-          assert.equal(els[0], myEl.querySelector('h2'), 'content distributed correctly');
         });
 
       });

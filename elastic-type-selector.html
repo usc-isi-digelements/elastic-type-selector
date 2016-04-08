@@ -28,7 +28,7 @@ Example:
 <dom-module id="elastic-type-selector">
     <template>
         <paper-dropdown-menu label="Type" value="{{selectedType}}">
-            <paper-menu class="dropdown-content">
+            <paper-menu class="dropdown-content" selected="0">
                 <template is="dom-repeat" items="{{availableTypes}}" as="availableType">
                     <paper-item>{{availableType}}</paper-item>
                 </template>
@@ -45,15 +45,27 @@ Example:
                 properties: {
                     /**
                      * The currently selected type
-                    */
+                     */
                     selectedType: {
                         type: String,
-                        notify: true
+                        notify: true,
+                        value: 'ALL'
+                    },
+
+                    /**
+                     * array of strings that should be bound to elastic-client-search 
+                     * type attribute
+                     */
+                    elasticTypes: {
+                        type: Array,
+                        notify: true,
+                        value: [],
+                        readOnly: true
                     },
 
                     /**
                      * The available types as returned from elasticsearch
-                    */
+                     */
                     availableTypes: {
                         type: Array,
                         notify: true,
@@ -62,21 +74,22 @@ Example:
 
                     /**
                      * The elasticsearch index for which types should be fetched
-                    */
+                     */
                     index: {
                         type: String
                     },
 
                     /**
                      * The elasticsearch client to use to fetch the types
-                    */
+                     */
                     client: {
                         type: Object
                     }
                 },
 
                 observers: [
-                    'fetchAvailableTypes(client, index)'
+                    'fetchAvailableTypes(client, index)',
+                    'setElasticTypes(selectedType)'
                 ],
 
                 /**
@@ -90,15 +103,24 @@ Example:
                         index: index
                     })
                     .then(function(mapping) {
-                        var types = [];
+                        var types = ['ALL'];
                         _.each(mapping[index].mappings, function(typeMapping, type) {
                             if(type !== '_default_') {
                                 types.push(type);
                             }
-                        })
+                        });
                         me._setAvailableTypes(types);
                         return;
-                    })
+                    });
+                },
+
+                /**
+                 * if this.type array contains string 'ALL', then return empty array.
+                 * in elastic, an empty array will by default query over all types
+                 */
+                setElasticTypes: function(selectedType) {
+                    var arrTypes = (selectedType === 'ALL') ? [] : [selectedType];
+                    this._setElasticTypes(arrTypes);
                 }
             });
         })();

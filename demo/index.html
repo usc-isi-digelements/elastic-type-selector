@@ -30,11 +30,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           selected-type="{{selected}}"
           available-types="{{available}}"
           client="{{esclient}}"
-          index="mockads">
+          index="mockads"
+          elastic-types="{{exportedTypes}}">
       </elastic-type-selector>
 
       <p><span>Available types: </span>{{available}}</p>
       <p><span>Selected type: </span>{{selected}}</p>
+      <p><span>Elastic Type Array: </span>{{exportedTypes}}</p>
     </template>
   </body>
 </html>
