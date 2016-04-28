@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../elasticsearch/elasticsearch.js"></script>
 
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../elastic-type-selector.html">
@@ -22,34 +23,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
+
     <test-fixture id="elastic-type-selector-fixture">
       <template>
-        <h2>elastic-type-selector</h2>
-        <elastic-type-selector>
-          
+        <elastic-type-selector
+            index="mockads"
+            elastic-types="{{exportedTypes}}">
         </elastic-type-selector>
       </template>
     </test-fixture>
+
+    <test-fixture id="elastic-type-selector-fixture">
+      <template>
+        <elastic-type-selector
+            index="mockads"
+            elastic-types="{{exportedTypes}}">
+        </elastic-type-selector>
+      </template>
+    </test-fixture>
+    <test-fixture id="elastic-type-selector-fixture-2">
+      <template>
+        <elastic-type-selector
+            index="mockads"
+            elastic-types="{{exportedTypes}}">
+        </elastic-type-selector>
+      </template>
+    </test-fixture>   
 
     <script>
       suite('<elastic-type-selector>', function() {
 
         var myEl;
+        var myEl2
+        var client;
 
         setup(function() {
           myEl = fixture('elastic-type-selector-fixture');
+          myEl2 = fixture('elastic-type-selector-fixture-2');
+          client = new elasticsearch.Client({host: 'http://localhost:9200'});
+          myEl.client = client;
         });
 
         test('choosing ALL sets elasticTypes to empty array', function() {
-
+          myEl.selectedType = 'ALL';
+          assert.deepEqual(myEl.elasticTypes, []);
         });
 
-        test('initial type is ALL', function() {
-
+        test('initial selected type is ALL', function() {
+          assert.equal(myEl.selectedType, 'ALL');
         });
 
         test('selecting a type updates elasticTypes array', function() {
+          myEl.selectedType = 'ad';
+          assert.deepEqual(myEl.elasticTypes, ['ad']);
+        });
 
+        test('without elastic client', function() {
+          myEl2.availableTypes = ['foo', 'bar', 'none'];
+          myEl2.selectedType = 'bar';
+          assert.deepEqual(myEl2.elasticTypes, ['bar']);
         });
 
       });

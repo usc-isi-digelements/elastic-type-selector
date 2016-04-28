@@ -59,17 +59,16 @@ Example:
                     elasticTypes: {
                         type: Array,
                         notify: true,
-                        value: [],
-                        readOnly: true
+                        value: []
                     },
 
                     /**
-                     * The available types as returned from elasticsearch
+                     * The available types.  This is set automatically with an elastic
+                     * query if both index and client are defined.
                      */
                     availableTypes: {
                         type: Array,
-                        notify: true,
-                        readOnly: true
+                        notify: true
                     },
 
                     /**
@@ -80,7 +79,9 @@ Example:
                     },
 
                     /**
-                     * The elasticsearch client to use to fetch the types
+                     * The elasticsearch client to use to fetch the types.  Don't
+                     * supply this object if you are initializing availableTypes
+                     * with an array.
                      */
                     client: {
                         type: Object
@@ -97,7 +98,7 @@ Example:
                  * the supplied elasticsearch client
                 */
                 fetchAvailableTypes: function(client, index) {
-                    var me = this;
+                    var self = this;
 
                     client.indices.getMapping({
                         index: index
@@ -109,18 +110,17 @@ Example:
                                 types.push(type);
                             }
                         });
-                        me._setAvailableTypes(types);
+                        self.availableTypes = types;
                         return;
                     });
                 },
 
                 /**
-                 * if this.type array contains string 'ALL', then return empty array.
+                 * if array contains string 'ALL', then return empty array.
                  * in elastic, an empty array will by default query over all types
                  */
                 setElasticTypes: function(selectedType) {
-                    var arrTypes = (selectedType === 'ALL') ? [] : [selectedType];
-                    this._setElasticTypes(arrTypes);
+                    this.elasticTypes = (selectedType === 'ALL') ? [] : [selectedType];
                 }
             });
         })();
