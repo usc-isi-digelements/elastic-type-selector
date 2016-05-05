@@ -30,7 +30,7 @@ Example:
         <paper-dropdown-menu label="Type" value="{{selectedType}}">
             <paper-menu class="dropdown-content" selected="0">
                 <template is="dom-repeat" items="{{availableTypes}}" as="availableType">
-                    <paper-item>{{availableType}}</paper-item>
+                    <paper-item>{{availableType.displayName}}</paper-item>
                 </template>
             </paper-menu>
         </paper-dropdown-menu>
@@ -49,7 +49,8 @@ Example:
                     selectedType: {
                         type: String,
                         notify: true,
-                        value: 'ALL'
+                        value: 'ALL',
+                        observer: 'setElasticTypes'
                     },
 
                     /**
@@ -63,64 +64,29 @@ Example:
                     },
 
                     /**
-                     * The available types.  This is set automatically with an elastic
-                     * query if both index and client are defined.
+                     * The available types array of objects:
+                     *      [{'displayName: 'DISPLAY_NAME', 'typeName: 'TYPE_NAME'}, ...]
                      */
                     availableTypes: {
                         type: Array,
-                        notify: true
-                    },
-
-                    /**
-                     * The elasticsearch index for which types should be fetched
-                     */
-                    index: {
-                        type: String
-                    },
-
-                    /**
-                     * The elasticsearch client to use to fetch the types.  Don't
-                     * supply this object if you are initializing availableTypes
-                     * with an array.
-                     */
-                    client: {
-                        type: Object
+                        notify: false
                     }
                 },
 
-                observers: [
-                    'fetchAvailableTypes(client, index)',
-                    'setElasticTypes(selectedType)'
-                ],
-
-                /**
-                 * Query elasticsearch for the available types using
-                 * the supplied elasticsearch client
-                */
-                fetchAvailableTypes: function(client, index) {
-                    var self = this;
-
-                    client.indices.getMapping({
-                        index: index
-                    })
-                    .then(function(mapping) {
-                        var types = ['ALL'];
-                        _.each(mapping[index].mappings, function(typeMapping, type) {
-                            if(type !== '_default_') {
-                                types.push(type);
-                            }
-                        });
-                        self.availableTypes = types;
-                        return;
+                getTypeName: function (displayName) {
+                    var typeObj = _.find(this.availableTypes, function(elem) {
+                        return elem.displayName === displayName;
                     });
+                    return (typeObj === undefined) ? 'ALL' : typeObj.typeName;
                 },
 
                 /**
-                 * if array contains string 'ALL', then return empty array.
+                 * if selectedType is 'ALL', then return empty array because
                  * in elastic, an empty array will by default query over all types
                  */
                 setElasticTypes: function(selectedType) {
-                    this.elasticTypes = (selectedType === 'ALL') ? [] : [selectedType];
+                    var typeName = this.getTypeName(selectedType);
+                    this.elasticTypes = (typeName === 'ALL') ? [] : [typeName];
                 }
             });
         })();

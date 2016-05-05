@@ -27,41 +27,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <test-fixture id="elastic-type-selector-fixture">
       <template>
         <elastic-type-selector
-            index="mockads"
             elastic-types="{{exportedTypes}}">
         </elastic-type-selector>
       </template>
     </test-fixture>
 
-    <test-fixture id="elastic-type-selector-fixture">
-      <template>
-        <elastic-type-selector
-            index="mockads"
-            elastic-types="{{exportedTypes}}">
-        </elastic-type-selector>
-      </template>
-    </test-fixture>
-    <test-fixture id="elastic-type-selector-fixture-2">
-      <template>
-        <elastic-type-selector
-            index="mockads"
-            elastic-types="{{exportedTypes}}">
-        </elastic-type-selector>
-      </template>
-    </test-fixture>   
 
     <script>
       suite('<elastic-type-selector>', function() {
 
         var myEl;
-        var myEl2
-        var client;
+
+        var availTypesArr = 
+          [{'displayName':'ALL', 'typeName':'all'}, 
+           {'displayName':'advertizement', 'typeName':'ad'},
+           {'displayName':'blog post', 'typeName':'blogpost'},
+           {'displayName':'Lawn Mower', 'typeName':'mower'}];
+
 
         setup(function() {
           myEl = fixture('elastic-type-selector-fixture');
-          myEl2 = fixture('elastic-type-selector-fixture-2');
-          client = new elasticsearch.Client({host: 'http://localhost:9200'});
-          myEl.client = client;
+          myEl.availableTypes = availTypesArr;
         });
 
         test('choosing ALL sets elasticTypes to empty array', function() {
@@ -74,14 +60,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         test('selecting a type updates elasticTypes array', function() {
-          myEl.selectedType = 'ad';
+          myEl.selectedType = 'advertizement';
           assert.deepEqual(myEl.elasticTypes, ['ad']);
-        });
 
-        test('without elastic client', function() {
-          myEl2.availableTypes = ['foo', 'bar', 'none'];
-          myEl2.selectedType = 'bar';
-          assert.deepEqual(myEl2.elasticTypes, ['bar']);
+          myEl.selectedType = 'Lawn Mower';
+          assert.deepEqual(myEl.elasticTypes, ['mower']);
         });
 
       });

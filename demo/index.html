@@ -20,23 +20,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </head>
   <body unresolved>
     <template is="dom-bind">
-      <elastic-client
-          config='{"host": "http://localhost:9200"}'
-          client="{{esclient}}"
-          cluster-status="{{my-status}}">
-      </elastic-client>
 
       <elastic-type-selector
           selected-type="{{selected}}"
-          available-types="{{available}}"
-          client="{{esclient}}"
-          index="mockads"
+          available-types='[{"displayName":"ALL", "typeName":""}, 
+          {"displayName":"advertizement", "typeName":"ad"},
+          {"displayName":"blog post", "typeName":"blog post"},
+          {"displayName":"Lawn Mowers", "typeName":"mowers"}]'
           elastic-types="{{exportedTypes}}">
       </elastic-type-selector>
 
-      <p><span>Available types: </span>{{available}}</p>
       <p><span>Selected type: </span>{{selected}}</p>
-      <p><span>Elastic Type Array: </span>{{exportedTypes}}</p>
+      <p><span>Elastic Type Array: </span>[{{exportedTypes}}]</p>
     </template>
   </body>
 </html>
