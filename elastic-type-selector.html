@@ -85,6 +85,9 @@ Example:
                  * in elastic, an empty array will by default query over all types
                  */
                 setElasticTypes: function(selectedType) {
+                    // following check is done because there is a bounce when changing
+                    // the type.  In this case, selectedType value is "" (empty string)
+                    if (!selectedType) { return; }
                     var typeName = this.getTypeName(selectedType);
                     this.elasticTypes = (typeName === 'ALL') ? [] : [typeName];
                 }
