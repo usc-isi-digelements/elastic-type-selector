@@ -89,7 +89,7 @@ Example:
                     // the type.  In this case, selectedType value is "" (empty string)
                     if (!selectedType) { return; }
                     var typeName = this.getTypeName(selectedType);
-                    this.elasticTypes = (typeName === 'ALL') ? [] : [typeName];
+                    this.elasticTypes = (typeName === '') ? [] : [typeName];
                 }
             });
         })();
