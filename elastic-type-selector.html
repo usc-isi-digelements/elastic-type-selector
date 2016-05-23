@@ -77,7 +77,7 @@ Example:
                     var typeObj = _.find(this.availableTypes, function(elem) {
                         return elem.displayName === displayName;
                     });
-                    return (typeObj === undefined) ? 'ALL' : typeObj.typeName;
+                    return (typeObj === undefined) ? '' : typeObj.typeName;
                 },
 
                 /**
