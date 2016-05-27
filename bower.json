@@ -20,10 +20,9 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.1",
-    "lodash": "4.6.1",
-    "elastic.js": "1.2.0",
     "elasticsearch": "^11.0.1",
-    "elastic-client": "DigElements/elastic-client#^0.0.3"
+    "elastic-client": "DigElements/elastic-client#^0.0.3",
+    "dig-common": "DigElements/dig-common#^0.0.4"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
