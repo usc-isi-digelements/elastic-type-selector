@@ -36,19 +36,17 @@
            {'displayName':'blog post', 'typeName':'blogpost'},
            {'displayName':'Lawn Mower', 'typeName':'mower'}];
 
-
         setup(function() {
           myEl = fixture('elastic-type-selector-fixture');
           myEl.availableTypes = availTypesArr;
         });
 
-        test('choosing ALL sets elasticTypes to empty array', function() {
-          myEl.selectedType = 'ALL';
-          assert.deepEqual(myEl.elasticTypes, []);
-        });
-
         test('initial selected type is ALL', function() {
           assert.equal(myEl.selectedType, 'ALL');
+        });
+
+        test('elasticTypes is an empty array by default', function() {
+          assert.deepEqual(myEl.elasticTypes, []);
         });
 
         test('selecting a type updates elasticTypes array', function() {
