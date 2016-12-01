@@ -32,13 +32,14 @@
 
         var availTypesArr = 
           [{'displayName':'ALL', 'typeName':''}, 
-           {'displayName':'advertizement', 'typeName':'ad'},
+           {'displayName':'advertisement', 'typeName':'ad'},
            {'displayName':'blog post', 'typeName':'blogpost'},
            {'displayName':'Lawn Mower', 'typeName':'mower'}];
 
-        setup(function() {
+        setup(function(done) {
           myEl = fixture('elastic-type-selector-fixture');
           myEl.availableTypes = availTypesArr;
+          flush(done);
         });
 
         test('initial selected type is ALL', function() {
@@ -50,13 +51,22 @@
         });
 
         test('selecting a type updates elasticTypes array', function() {
-          myEl.selectedType = 'advertizement';
+          myEl.selectedType = 'advertisement';
           assert.deepEqual(myEl.elasticTypes, ['ad']);
 
           myEl.selectedType = 'Lawn Mower';
           assert.deepEqual(myEl.elasticTypes, ['mower']);
         });
 
+        test('expected elements are part of the DOM', function() {
+          assert.isNotNull(myEl.$$('paper-dropdown-menu'));
+          assert.equal(myEl.$$('paper-dropdown-menu').label, 'Type');
+          assert.equal(myEl.$$('paper-dropdown-menu').value, myEl.selectedType);
+          assert.isNotNull(myEl.$$('paper-menu'));
+          assert.equal(myEl.$$('paper-menu').selected, 0);
+          assert.isNotNull(myEl.querySelectorAll('paper-item'));
+          assert.equal(myEl.querySelectorAll('paper-item').length, myEl.availableTypes.length);
+        });
       });
     </script>
 
