@@ -64,8 +64,8 @@
           assert.equal(myEl.$$('paper-dropdown-menu').value, myEl.selectedType);
           assert.isNotNull(myEl.$$('paper-menu'));
           assert.equal(myEl.$$('paper-menu').selected, 0);
-          assert.isNotNull(myEl.querySelectorAll('paper-item'));
-          assert.equal(myEl.querySelectorAll('paper-item').length, myEl.availableTypes.length);
+          assert.isNotNull(Polymer.dom(myEl.root).querySelectorAll('paper-item'));
+          assert.equal(Polymer.dom(myEl.root).querySelectorAll('paper-item').length, myEl.availableTypes.length);
         });
       });
     </script>
