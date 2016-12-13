@@ -2,28 +2,21 @@
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-menu/paper-menu.html">
 <link rel="import" href="../paper-item/paper-item.html">
-<link rel="import" href="../dig-common/dig-common.html">
 
 <!--
-Element which fetches and provides a select input for an ElasticSearch index
+A Polymer Element showing a dropdown menu to select elasticsearch index types.
 
-Example:
-    <elastic-client
-        config='{"host": "http://localhost:9200"}'
-        client={{esClient}}
-        cluster-status={{esStatus}}
-    >
-    </elastic-client>
-
-    <elastic-type-selector
-        client=[[esClient]]
-        index="ads"
-        selected-type={{selectedType}}
-        available-types={{availableTypes}}
-    ></elastic-type-selector>
+### Example
+```html
+<elastic-type-selector
+  selected-type={{selectedType}}
+  available-types={{availableTypes}}>
+</elastic-type-selector>
+```
 
 @demo demo/index.html
 -->
+
 <dom-module id="elastic-type-selector">
     <template>
         <paper-dropdown-menu label="Type" value="{{selectedType}}">
@@ -43,51 +36,82 @@ Example:
 
                 properties: {
                     /**
-                     * The currently selected type
+                     * (Optional|Output)
+                     *
+                     * The currently selected type.
+                     *
+                     * @type {String}
+                     * @default 'ALL'
                      */
                     selectedType: {
                         type: String,
-                        notify: true,
                         value: 'ALL',
-                        observer: 'setElasticTypes'
+                        observer: '_setElasticTypes'
                     },
 
                     /**
-                     * array of strings that should be bound to elastic-client-search 
-                     * type attribute
+                     * (Output)
+                     *
+                     * A list of elasticsearch index types.
+                     *
+                     * @type {Array}
+                     * @default []
                      */
                     elasticTypes: {
                         type: Array,
                         notify: true,
-                        value: []
+                        value: function() {
+                          return [];
+                        }
                     },
 
                     /**
+                     * (Optional)
+                     *
                      * The available types array of objects:
-                     *      [{'displayName: 'DISPLAY_NAME', 'typeName: 'TYPE_NAME'}, ...]
+                     * [{'displayName: 'DISPLAY_NAME', 'typeName: 'TYPE_NAME'}, ...]
+                     *
+                     * @type {Array}
+                     * @default [{ displayName: 'ALL', typeName: '' }]
                      */
                     availableTypes: {
                         type: Array,
-                        notify: false
+                        value: function() {
+                          return [{
+                            displayName: 'ALL',
+                            typeName: ''
+                          }];
+                        }
                     }
                 },
 
-                getTypeName: function (displayName) {
-                    var typeObj = _.find(this.availableTypes, function(elem) {
-                        return elem.displayName === displayName;
-                    });
+                /**
+                 * Returns the type name for the given display name.
+                 *
+                 * @param {String} displayName
+                 * @return {String}
+                 * @private
+                 */
+                _getTypeName: function (displayName) {
+                    var typeObj = this.availableTypes ? this.availableTypes.find(function(item) {
+                        return item.displayName === displayName;
+                    }) : undefined;
                     return (typeObj === undefined) ? '' : typeObj.typeName;
                 },
 
                 /**
-                 * if selectedType is 'ALL', then return empty array because
-                 * in elastic, an empty array will by default query over all types
+                 * Sets the elastic types property using the given selected type.
+                 *
+                 * @param {String} selectedType
+                 * @private
                  */
-                setElasticTypes: function(selectedType) {
+                _setElasticTypes: function(selectedType) {
                     // following check is done because there is a bounce when changing
                     // the type.  In this case, selectedType value is "" (empty string)
                     if (!selectedType) { return; }
-                    var typeName = this.getTypeName(selectedType);
+                    var typeName = this._getTypeName(selectedType);
+                    // if selectedType is 'ALL', then return empty array because
+                    // in elastic, an empty array will by default query over all types
                     this.elasticTypes = (typeName === '') ? [] : [typeName];
                 }
             });

@@ -1,37 +1,31 @@
-<!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>elastic-type-selector Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="import" href="../../elastic-client/elastic-client.html">
     <link rel="import" href="../elastic-type-selector.html">
-
   </head>
   <body unresolved>
-    <template is="dom-bind">
-
+    <template is="dom-bind" id="demo">
       <elastic-type-selector
           selected-type="{{selected}}"
-          available-types='[{"displayName":"ALL", "typeName":""}, 
-          {"displayName":"advertizement", "typeName":"ad"},
-          {"displayName":"blog post", "typeName":"blog post"},
-          {"displayName":"Lawn Mowers", "typeName":"mowers"}]'
+          available-types='[{"displayName":"ALL","typeName":""},{"displayName":"english","typeName":"english"},{"displayName":"spanish","typeName":"spanish"}]'
           elastic-types="{{exportedTypes}}">
       </elastic-type-selector>
 
-      <p><span>Selected type: </span>{{selected}}</p>
-      <p><span>Elastic Type Array: </span>[{{exportedTypes}}]</p>
+      <p><span>Selected Type: </span>[[selected]]</p>
+      <p><span>Elastic Type Array: </span>[[stringify(exportedTypes)]]</p>
     </template>
+
+    <script>
+      (function(document) {
+        var demo = document.querySelector('#demo');
+
+        demo.stringify = function(object) {
+          return JSON.stringify(object);
+        };
+      })(document);
+    </script>
   </body>
 </html>

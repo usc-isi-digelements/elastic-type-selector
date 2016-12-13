@@ -1,21 +1,14 @@
-<!doctype html>
-
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
     <script src="../../elasticsearch/elasticsearch.js"></script>
-
-    <!-- Step 1: import the element to test -->
     <link rel="import" href="../elastic-type-selector.html">
   </head>
+
   <body>
-
-    <!-- You can use the document as a place to set up your fixtures. -->
-
     <test-fixture id="elastic-type-selector-fixture">
       <template>
         <elastic-type-selector
@@ -24,11 +17,9 @@
       </template>
     </test-fixture>
 
-
     <script>
       suite('<elastic-type-selector>', function() {
-
-        var myEl;
+        var element;
 
         var availTypesArr = 
           [{'displayName':'ALL', 'typeName':''}, 
@@ -37,38 +28,37 @@
            {'displayName':'Lawn Mower', 'typeName':'mower'}];
 
         setup(function(done) {
-          myEl = fixture('elastic-type-selector-fixture');
-          myEl.availableTypes = availTypesArr;
+          element = fixture('elastic-type-selector-fixture');
+          element.availableTypes = availTypesArr;
           flush(done);
         });
 
         test('initial selected type is ALL', function() {
-          assert.equal(myEl.selectedType, 'ALL');
+          assert.equal(element.selectedType, 'ALL');
         });
 
         test('elasticTypes is an empty array by default', function() {
-          assert.deepEqual(myEl.elasticTypes, []);
+          assert.deepEqual(element.elasticTypes, []);
         });
 
         test('selecting a type updates elasticTypes array', function() {
-          myEl.selectedType = 'advertisement';
-          assert.deepEqual(myEl.elasticTypes, ['ad']);
+          element.selectedType = 'advertisement';
+          assert.deepEqual(element.elasticTypes, ['ad']);
 
-          myEl.selectedType = 'Lawn Mower';
-          assert.deepEqual(myEl.elasticTypes, ['mower']);
+          element.selectedType = 'Lawn Mower';
+          assert.deepEqual(element.elasticTypes, ['mower']);
         });
 
         test('expected elements are part of the DOM', function() {
-          assert.isNotNull(myEl.$$('paper-dropdown-menu'));
-          assert.equal(myEl.$$('paper-dropdown-menu').label, 'Type');
-          assert.equal(myEl.$$('paper-dropdown-menu').value, myEl.selectedType);
-          assert.isNotNull(myEl.$$('paper-menu'));
-          assert.equal(myEl.$$('paper-menu').selected, 0);
-          assert.isNotNull(Polymer.dom(myEl.root).querySelectorAll('paper-item'));
-          assert.equal(Polymer.dom(myEl.root).querySelectorAll('paper-item').length, myEl.availableTypes.length);
+          assert.isNotNull(element.$$('paper-dropdown-menu'));
+          assert.equal(element.$$('paper-dropdown-menu').label, 'Type');
+          assert.equal(element.$$('paper-dropdown-menu').value, element.selectedType);
+          assert.isNotNull(element.$$('paper-menu'));
+          assert.equal(element.$$('paper-menu').selected, 0);
+          assert.isNotNull(Polymer.dom(element.root).querySelectorAll('paper-item'));
+          assert.equal(Polymer.dom(element.root).querySelectorAll('paper-item').length, element.availableTypes.length);
         });
       });
     </script>
-
   </body>
 </html>
