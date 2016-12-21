@@ -1,10 +1,9 @@
 {
   "name": "elastic-type-selector",
-  "version": "1.0.6",
-  "authors": [
-    "Next Century Corporation"
-  ],
   "description": "A Polymer Element showing a dropdown menu to select elasticsearch index types.",
+  "version": "1.0.6",
+  "authors": ["Next Century Corporation"],
+  "license": "Apache-2.0",
   "keywords": [
     "web-component",
     "polymer"
