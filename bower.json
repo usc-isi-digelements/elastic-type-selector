@@ -1,7 +1,7 @@
 {
   "name": "elastic-type-selector",
   "description": "A Polymer Element showing a dropdown menu to select elasticsearch index types.",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [
@@ -9,7 +9,6 @@
     "polymer"
   ],
   "main": "elastic-type-selector.html",
-  "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/DigElements/elastic-type-selector/",
   "ignore": [
     "/.*",
